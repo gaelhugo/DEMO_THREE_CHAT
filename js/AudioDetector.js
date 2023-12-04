@@ -49,13 +49,13 @@ export default class AudioDetector extends EventEmitter {
 
         // Reset for the next recording
         this.audioChunks = [];
-        this.startRecordingButton.disabled = false;
-        this.stopRecordingButton.disabled = true;
+        // this.startRecordingButton.disabled = false;
+        // this.stopRecordingButton.disabled = true;
       };
 
       this.mediaRecorder.start();
-      this.startRecordingButton.disabled = true;
-      this.stopRecordingButton.disabled = false;
+      // this.startRecordingButton.disabled = true;
+      // this.stopRecordingButton.disabled = false;
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }

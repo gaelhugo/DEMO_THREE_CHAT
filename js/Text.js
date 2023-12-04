@@ -33,6 +33,17 @@ export default class Text {
     text.rotateX(-Math.PI / 2);
     text.castShadow = true;
     text.receiveShadow = true;
+
+    // Calculer la boîte englobante
+    const boiteEnglobante = new THREE.Box3().setFromObject(text);
+    const tailleBoite = new THREE.Vector3();
+    boiteEnglobante.getSize(tailleBoite);
+
+    // Ajuster la position du mesh en fonction du centre de la boîte englobante
+    text.position.x -= tailleBoite.x / 2;
+    text.position.y -= tailleBoite.y / 2;
+    text.position.z -= tailleBoite.z / 2;
+
     this.scene.add(text);
     return text;
   }

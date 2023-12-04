@@ -4,6 +4,8 @@ import Shape from "./Shape.js";
 import Light from "./Light.js";
 import * as dat from "dat.gui";
 import Text from "./Text.js";
+import Chat from "./Chat";
+import AudioDetector from "./AudioDetector";
 export default class App {
   constructor() {
     this.renderer = null;
@@ -11,6 +13,24 @@ export default class App {
     this.camera = null;
 
     this.gui = new dat.GUI();
+
+    this.chat = new Chat();
+    this.chat.addEventListener("word", this.addWord.bind(this));
+    this.chat.addEventListener("speechEnd", this.speechEnd.bind(this));
+
+    // init audio detector
+    this.audioDetector = new AudioDetector();
+    this.audioDetector.addEventListener(
+      "transcriptReady",
+      this.onTextReceived.bind(this)
+    );
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === " ") {
+        console.log("space");
+        this.audioDetector.stopRecording();
+      }
+    });
 
     this.initTHREE();
   }
@@ -60,28 +80,41 @@ export default class App {
     // this.text.createText("Hello ECAL");
 
     // collection de mots
-    const phrase =
-      "Les cookies nous permettent de personnaliser le contenu et les annonces";
-    this.words = phrase.split(" ");
-    this.positionDuMot = 0;
+    // const phrase =
+    //   "Les cookies nous permettent de personnaliser le contenu et les annonces";
+    // this.words = phrase.split(" ");
+    // this.positionDuMot = 0;
+    // this.allMots = [];
+    // this.interval = setInterval(() => {
+    //   this.addWord();
+    // }, 2000);
     this.allMots = [];
-    this.interval = setInterval(() => {
-      this.addWord();
-    }, 2000);
-
+    // this.chat.call(this.chat.context);
     //
     this.draw();
   }
 
-  addWord() {
-    const mot = this.words.shift();
-    if (this.words.length <= 0) clearInterval(this.interval);
-    const text = this.text.createText(mot, this.font);
+  addWord(word) {
+    // const mot = this.words.shift();
+    // if (this.words.length <= 0) clearInterval(this.interval);
+    const text = this.text.createText(word, this.font);
     this.allMots.push(text);
+    console.log(text);
     this.allMots.forEach((mot, index) => {
       mot.position.z = (this.allMots.length - 1 - index) * -1.5;
-      // mot.position.z = i * -1.5;
     });
+  }
+
+  speechEnd(data) {
+    this.chat.messages.push({
+      role: "assistant",
+      content: data.choices[0].message.content,
+    });
+    this.audioDetector.startRecording();
+  }
+
+  onTextReceived(transcript) {
+    this.chat.call(transcript.text);
   }
 
   draw() {

@@ -16,7 +16,7 @@ export default class Shape {
   createFloor() {
     const geometry = new THREE.PlaneGeometry(100, 100);
     const material = new THREE.MeshPhongMaterial({
-      color: 0xcccccc,
+      color: 0x999999,
       side: THREE.DoubleSide,
     });
     const plane = new THREE.Mesh(geometry, material);

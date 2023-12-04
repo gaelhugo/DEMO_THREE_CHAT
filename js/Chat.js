@@ -9,7 +9,7 @@ export default class Chat extends EventEmitter {
     this.messages = [];
     this.context =
       // "Tu es un specialiste sur la culture et l'art contemporain. Et tu me poses des questions. Basé sur mes réponses, tu me poses d'autres questions.Tu fais des question réponses très courtes et succinctes. Commence par me poser une question sur un quelconque sujet culturel.";
-      "Tu es un spécialiste sur le cinema. Et tu me poses des questions. Basé sur mes réponses, tu me poses d'autres questions. Tu fais des question réponses très courtes et succinctes. Commence par me poser une question sur un quelconque sujet cinematographique.";
+      "Tu es un spécialiste de l'ECAL, Ecole Cantonale d'Art de Lausanne. Et tu me poses des questions. Basé sur mes réponses, tu me poses d'autres questions. Tu fais des question réponses très courtes et succinctes. Commence par me poser une question sur un quelconque sujet en relation avec l'ECAL.";
 
     this.speech = new Speech(); // will throw an exception if not browser supported
     if (this.speech.hasBrowserSupport()) {
@@ -56,6 +56,7 @@ export default class Chat extends EventEmitter {
       content: userMessage,
     });
     console.log("config", Config.TEXT_MODEL);
+    console.log("userMessage", userMessage);
     try {
       console.log("Send message to OpenAI API");
       // Fetch the response from the OpenAI API with the signal from AbortController
